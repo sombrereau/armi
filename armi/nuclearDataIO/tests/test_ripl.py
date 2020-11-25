@@ -125,7 +125,7 @@ class TestRipl(unittest.TestCase):
 
     def test_discoverRiplDecayFiles(self):
         ripDecayFiles = ripl.discoverRiplDecayFiles(THIS_DIR)
-        self.assertEqual(len(ripDecayFiles), 1)
+        self.assertEqual(len(ripDecayFiles), 2)
         self.assertIn("z036.dat", ripDecayFiles[0])
         self.assertTrue(os.path.exists(ripDecayFiles[0]))
 
@@ -160,6 +160,13 @@ class TestRipl(unittest.TestCase):
         for nucName in ["XE134", "XE136", "EU151"]:
             nb = nuclideBases.byName[nucName]
             self.assertAlmostEqual(testDecayConstants[nb], 0, places=3)
+
+    def test_MetaStableRiplReader(self):
+        testDecayConstants = ripl.getNuclideDecayConstants(os.path.join(THIS_DIR,"z047.dat"))
+
+        ag110 = testDecayConstants[nuclideBases.byName["AG110M"]]
+
+        self.assertAlmostEqual(ag110, math.log(2.0) / 2.159E+07, 0, 3)
 
 
 if __name__ == "__main__":
